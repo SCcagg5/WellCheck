@@ -6,6 +6,7 @@ import os
 
 app = Bottle()
 conf = config.CONFIG['API']
+ip = "0.0.0.0"
 
 @app.hook('after_request')
 def enable_cors():
@@ -25,6 +26,6 @@ def base():
 
 if __name__ == '__main__':
         try:
-            run(app, host=conf['ip'], port=conf['port'])
+            run(app, host=ip, port=conf['port'])
         except:
             os._exit(0)
