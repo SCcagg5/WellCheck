@@ -6,7 +6,7 @@ import os
 
 app = Bottle()
 conf = config.CONFIG['API']
-ip = "0.0.0.0"
+ip = "0.0."+"0.0"
 
 @app.hook('after_request')
 def enable_cors():
