@@ -25,6 +25,6 @@ def base():
 
 if __name__ == '__main__':
         try:
-            run(app, host=conf['host'], port=conf['port'])
+            run(app, host=conf['ip'], port=conf['port'])
         except:
             os._exit(0)
