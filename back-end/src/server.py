@@ -1,9 +1,11 @@
 from bottle import Bottle, run, route, get, post, response, request, hook
 from returnvalue import ret
 from params import check
+import config
 import os
 
 app = Bottle()
+conf = config.CONFIG['API']
 
 @app.hook('after_request')
 def enable_cors():
@@ -23,6 +25,6 @@ def base():
 
 if __name__ == '__main__':
         try:
-            run(app, host='127.0.0.1', port=8080)
+            run(app, host=conf['host'], port=conf['port'])
         except:
             os._exit(0)
