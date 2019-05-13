@@ -1,0 +1,13 @@
+version: '3.3'
+
+services:
+        bck-end:
+          build: ./back-end
+          ports:
+            - 5000:8080
+          tty: true
+          stdin_open: true
+          environment:
+            - PROD=1
+          volumes:
+            - ./:/home/api/WellCheck
