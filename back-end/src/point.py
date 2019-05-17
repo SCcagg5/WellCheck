@@ -16,7 +16,7 @@ class points:
         return {"my_points": sql.get("SELECT `id` FROM `point` WHERE `user_id` = %s", (self.userid)), "shared_to_me": sql.get("SELECT `point_id` FROM `share` WHERE `user_id_to` = %s", (self.userid))}
 
 class point:
-    def __init__(self, db_id, key = None, point_id = None, userid = None):
+    def __init__(self, db_id, userid, key = None, point_id = None, ):
         self.id = db_id
         self.userask = userid
         self.key = key
@@ -50,7 +50,7 @@ class point:
         "surname": self.surname,
         "data": self.__getdata()[1]
         }
-        if self.sharefrom is None:
+        if not self.__user_got_point():
             ret["shareto"] = self.shareto
         else:
             ret["sharefrom"] = self.sharefrom
@@ -86,12 +86,35 @@ class point:
         self.sig_id = data[7]
         data = sql.get("SELECT mail FROM `user` INNER JOIN `share` ON user.id = share.user_id_to WHERE share.point_id = %s", (self.id))
         self.shareto = data if data is None else []
-        if self.user is not self.userask:
+        if not self.__user_got_point():
             self.surname = sql.get("SELECT surname FROM `share` WHERE point_id = %s AND user_id_to = %s", (self.id, self.userask))[0][0]
             self.sharefrom = self.user
 
+    def rename(self, surname):
+        if surname is "":
+            surname = self.name
+        self.surname = surname
+        self.__update()
+        self.fromdbinfo()
+        return self.infos()
+
+    def share(self, mail):
+        if not self.__user_exist():
+            return [False, "user do not exist", 404]
+        if not self.__user_got_point():
+            return [False, "user do not possess this point", 403]
+        idto = self.__user_exist()
+        succes = sql.input("INSERT INTO `share` (`id`, `user_id_from`, `user_id_to`, `point_id`, `surname`) VALUES (NULL, %s, %s, %s, %s)", \
+        (self.userask, idto, self.id, self.name))
+        if not succes:
+            return [False, "input error", 500]
+        self.fromdbinfo()
+        return self.infos()
+
 
     def __input(self):
+        if not self.__point_exist():
+            return [False, "device already registered", 500]
         succes = sql.input("INSERT INTO `point` (`id`, `lng`, `lat`, `name`, `surname`, `user_id`, `key`, `id_key`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s)", \
         (self.lng, self.lat, self.name, self.surname, self.userask, self.key, self.sig_id))
         if succes:
@@ -115,8 +138,35 @@ class point:
         return [True, ret, None]
 
     def __update(self):
-        succes = sql.input("UPDATE `user` SET `lng` = %s, `lat` = %s , `name` = %s, `surname` = %s WHERE `id` = %s;", \
-        (self.lng, self.lat, self.name, self.surname, self.id))
+        if self.__user_got_point():
+            succes = sql.input("UPDATE `point` SET `lng` = %s, `lat` = %s , `name` = %s, `surname` = %s WHERE `id` = %s;", \
+            (self.lng, self.lat, self.name, self.surname, self.id))
+        else:
+            succes = sql.input("UPDATE `share` SET `surname` = %s WHERE `point_id` = %s AND user_id_to = %s;", \
+            (self.surname, self.id, self.userask))
         if succes:
             return True
         return False
+
+    def __point_exist(self):
+        if self.sig_id != None:
+            try:
+                id = sql.get("SELECT `id` FROM `point` WHERE `id_key` = %s", (self.sig_id))[0][0]
+                if id == self.id:
+                    return True
+            except:
+                return False
+        return False
+
+    def __user_exist(self, mail):
+        if mail != None:
+            try:
+                ret =  sql.get("SELECT `id`, `mail` FROM `user` WHERE `mail` = %s", (self.mail))[0]
+                if ret[1] == mail:
+                    return ret[0]
+            except:
+                return False
+        return False
+
+    def __user_got_point(self):
+        return (self.user == self.userask)

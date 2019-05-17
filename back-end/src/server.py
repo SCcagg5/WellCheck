@@ -86,7 +86,7 @@ def base():
     toret = ret(request.route.rule, params)
 
     if not toret.err:
-        err = check.contain(params, ["mail", "token", "key", "pointid"])
+        err = check.contain(params, ["mail", "token", "key", "sig_id"])
         if not err[0]:
             toret.add_error(err[1], err[2])
 
@@ -99,8 +99,95 @@ def base():
             toret.add_data(err[1])
 
     if not toret.err:
-        device = point(None, params["key"], params["pointid"], use.id)
+        device = point(None, use.id, params["key"], params["sig_id"])
         err = device.infos()
+        if not err[0]:
+            toret.add_error(err[1], err[2])
+        else:
+            toret.add_data(err[1])
+    return toret.ret()
+
+@app.route('/infos/', method=['OPTIONS', 'POST'])
+def base():
+    if request.method == 'OPTIONS':
+        return {}
+    params = check.json(request)
+    toret = ret(request.route.rule, params)
+
+    if not toret.err:
+        err = check.contain(params, ["mail", "token", "point_id"])
+        if not err[0]:
+            toret.add_error(err[1], err[2])
+
+    if not toret.err:
+        use = user(params["mail"], None, params["token"])
+        err = use.connect()
+        if not err[0]:
+            toret.add_error(err[1], err[2])
+        else:
+            toret.add_data(err[1])
+
+    if not toret.err:
+        device = point(params["point_id"], use.id)
+        err = device.infos()
+        if not err[0]:
+            toret.add_error(err[1], err[2])
+        else:
+            toret.add_data(err[1])
+    return toret.ret()
+
+@app.route('/share/', method=['OPTIONS', 'POST'])
+def base():
+    if request.method == 'OPTIONS':
+        return {}
+    params = check.json(request)
+    toret = ret(request.route.rule, params)
+
+    if not toret.err:
+        err = check.contain(params, ["mail", "token", "mail_to", "point_id"])
+        if not err[0]:
+            toret.add_error(err[1], err[2])
+
+    if not toret.err:
+        use = user(params["mail"], None, params["token"])
+        err = use.connect()
+        if not err[0]:
+            toret.add_error(err[1], err[2])
+        else:
+            toret.add_data(err[1])
+
+    if not toret.err:
+        device = point(params["point_id"], use.id)
+        err = device.share(params["mail_to"])
+        if not err[0]:
+            toret.add_error(err[1], err[2])
+        else:
+            toret.add_data(err[1])
+    return toret.ret()
+
+@app.route('/surname/', method=['OPTIONS', 'POST'])
+def base():
+    if request.method == 'OPTIONS':
+        return {}
+    params = check.json(request)
+    toret = ret(request.route.rule, params)
+
+    if not toret.err:
+        err = check.contain(params, ["mail", "token", "surname", "point_id"])
+        if not err[0]:
+            toret.add_error(err[1], err[2])
+
+    if not toret.err:
+        use = user(params["mail"], None, params["token"])
+        err = use.connect()
+        if not err[0]:
+            toret.add_error(err[1], err[2])
+        else:
+            toret.add_data(err[1])
+
+    if not toret.err:
+        device = point(params["point_id"], use.id)
+        err = device.rename(params["surname"])
         if not err[0]:
             toret.add_error(err[1], err[2])
         else:
