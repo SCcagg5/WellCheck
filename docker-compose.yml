@@ -11,3 +11,24 @@ services:
             - PROD=0
           volumes:
             - ./:/home/api/WellCheck
+
+        dbMysql:
+          image: mysql:8.0.3
+          restart: always
+          environment:
+              MYSQL_ROOT_PASSWORD: 1q2W3e #CONFIG.DB_PASS
+              MYSQL_DATABASE: wellcheck #CONFIG.DB_NAME
+          volumes:
+            - ./db/db_data:/var/lib/mysql
+            - ./db/mysql-dump:/docker-entrypoint-initdb.d
+
+        front-adm:
+           image: adminer
+           restart: always
+           ports:
+             - 8081:8080
+           depends_on:
+             - dbMysql
+
+volumes:
+  db_data:

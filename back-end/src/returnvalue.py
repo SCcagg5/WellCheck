@@ -38,7 +38,7 @@ class ret:
             self.add_error("Bad error input", 500)
             return 1
         self.err = True
-        return 0
+        return self.ret()
 
     def add_data(self, data = None):
         self.data['data'] = data
