@@ -7,7 +7,7 @@ from point import point, points
 import os
 
 app = Bottle()
-host = os.getenv('API_HOST', '0.0.0.0')
+host = os.getenv('API_HOST', '172.0.0.1')
 port = os.getenv('API_PORT', 8080)
 weba = os.getenv('API_WEBA', '*')
 

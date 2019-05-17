@@ -59,7 +59,7 @@ class user:
         return [True, ret, None]
 
     def __hash(self, password):
-        if password == None:
+        if password is None:
             return None
         mail = self.mail
         s = len(mail)
@@ -72,13 +72,13 @@ class user:
         return hashlib.sha512((str(self.date) + str(self.role) + str(secret) + "1Qs3C").encode('utf-8')).hexdigest()
 
     def __verifytoken(self, token):
-        return (token == self.__gettoken())
+        return (token is self.__gettoken())
 
     def __account_exist(self):
         if self.mail != None:
             try:
                 ret =  sql.get("SELECT `mail` FROM `user` WHERE `mail` = %s", (self.mail))[0][0]
-                if ret == self.mail:
+                if ret is self.mail:
                     return True
             except:
                 return False

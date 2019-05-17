@@ -22,7 +22,7 @@ class ret:
             if self.data["queryInfos"]["params"]:
                 if i in self.data["queryInfos"]["params"]:
                     del self.data["queryInfos"]["params"][i]
-        if self.data['error'] == None :
+        if self.data['error'] is None :
             self.data['succes'] = True
             self.data['status'] = 200
         return self.data
@@ -31,10 +31,10 @@ class ret:
         self.data['error'] = error
         self.data['status'] = code
         self.data['data'] = None
-        if code == None:
+        if code is None:
             self.add_error("Bad code input", 500)
             return 1
-        if error == None:
+        if error is None:
             self.add_error("Bad error input", 500)
             return 1
         self.err = True
@@ -43,14 +43,14 @@ class ret:
     def add_data(self, data = None):
         self.data['data'] = data
         self.set_code(200)
-        if data == None:
+        if data is None:
             self.add_error("Bad data input", 500)
             return 1
         return 0
 
     def set_code(self, code = None):
         self.data['status'] = code
-        if code == None:
+        if code is None:
             self.add_error("Bad code input", 500)
             return 1
         return 0
