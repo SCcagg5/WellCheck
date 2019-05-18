@@ -1,3 +1,4 @@
+
 # WellCheck
 
 [![CodeFactor](https://www.codefactor.io/repository/github/sccagg5/wellcheck/badge)](https://www.codefactor.io/repository/github/sccagg5/wellcheck)
@@ -13,6 +14,39 @@
  echo -e "SIGFOX_LOG='$SIG_L'\nSIGFOX_PASS='$SIG_P'" >> back-end/CONFIG;`# adding the proper env var`
  docker-compose up -d --build; 						`# launching the docker-compose`
 ```
+### `Dockerfile` comportement:
+
+the api's `dockerfile` is based on python3.7, at launch it:
+ * runs in PRODMOD if `$PROD` is ***not set*** or equals ***1***
+ * installs needed packages from `back-end/requirements.txt` using `pip3`
+ * loads ENV from `back-end/CONFIG`
+
+### PRODMOD: 
+
+The prod mod ignore the shared volume and `git clone` an actual version of the back-end/src/
+ 
+### ENV:
+
+The setup is based on `back-end/CONFIG` it let you define:
+```bash
+API_HOST='0.0.0.0'				`# INSIDE CONTAINER api host`
+API_PORT=8080					`# INSIDE CONTAINER port of the app`
+API_SECRET="1q2W3e4R"				`# secret to define token AND PASSWORD`
+API_WEBA='*'					`# cors request`
+SIGFOX_LOG='5cdd8699e833d974667621XX'		`# `
+SIGFOX_PASS='c2bbc9c4cb414df59caecf3964d3b6XX'	`# `
+DB_HOST='dbMysql'				`# the host of the mysql database`
+DB_USER='root'					`# the user`
+DB_PASS='1q2W3e'				`# the password of the user`
+DB_NAME='wellcheck' 				`# the database name`
+``` 
+if the `DB_NAME` is changed you must change it also into `db/mysql-dump/mydb.sql` and `docker-compose`
+if the `API_PORT` is change you must change it also into `docker-compose`
+`API_WEBA='*'` is not recommended on PRODMOD
+
+
+----------
+
 
 ### Routes's Basics:
 
