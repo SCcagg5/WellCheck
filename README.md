@@ -14,7 +14,7 @@
  docker-compose up -d --build; 						`# launching the docker-compose`
 ```
 
-### Routes:
+### Routes's Basics:
 
 Routes | Methods | Params | Return |
 -|-|-|-|
@@ -25,7 +25,8 @@ Routes | Methods | Params | Return |
 `/addpoint/` | POST | mail, token, key, sig_id | id, location, name, surname, data, shareto |
 `/surname/` | POST | mail, token, surname | id, location, name, surname, data, (shareto or sharefrom) |
 `/share/` | POST | mail, token, mail_to, point_id | id, location, name, surname, data, shareto |
-``
+
+### Routes's Rules:
 
 Routes | Rules |
 -|-|
@@ -36,6 +37,8 @@ Routes | Rules |
 `/add_point/`| user must exist, <br>creds(`mail` and `token`) must be right, <br>`sig_id` should be accessible from your backend,sigfox |
 `/surname/` | user must exist, <br>creds(`mail` and `token`) must be right, <br>if `surname` equals `""` it will be set to the original `name` of the device |
 `/share/` | user must exist, <br>creds(`mail` and `token`) must be right, <br>you must possess `point_id`, <br>`mail_to` must be the mail of an eisting user, <br>`mail_to` must not be your own mail, <br>`mail_to` must not be in your `shareto` list |
+
+### Routes's JSON exemples:
 
 Routes | Body |
 -|-|
