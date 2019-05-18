@@ -194,6 +194,35 @@ def base():
             toret.add_data(err[1])
     return toret.ret()
 
+@app.route('/getall/', method=['OPTIONS', 'POST'])
+def base():
+    if request.method == 'OPTIONS':
+        return {}
+    params = check.json(request)
+    toret = ret(request.route.rule, params)
+
+    if not toret.err:
+        err = check.contain(params, ["mail", "token"])
+        if not err[0]:
+            toret.add_error(err[1], err[2])
+
+    if not toret.err:
+        use = user(params["mail"], None, params["token"])
+        err = use.connect()
+        if not err[0]:
+            toret.add_error(err[1], err[2])
+        else:
+            toret.add_data(err[1])
+
+    if not toret.err:
+        devices = points(use.id)
+        err = devices.getall()
+        if not err[0]:
+            toret.add_error(err[1], err[2])
+        else:
+            toret.add_data(err[1])
+    return toret.ret()
+
 if __name__ == '__main__':
         try:
             run(app, host=host, port=port, debug=True)

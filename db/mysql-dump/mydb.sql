@@ -42,7 +42,7 @@ CREATE TABLE `point` (
 
 DROP TABLE IF EXISTS `share`;
 CREATE TABLE `share` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id_from` int(11) NOT NULL,
   `user_id_to` int(11) NOT NULL,
   `point_id` int(11) NOT NULL,

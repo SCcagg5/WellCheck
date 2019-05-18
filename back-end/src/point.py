@@ -13,7 +13,7 @@ class points:
         self.userid = userid
 
     def getall(self):
-        return {"my_points": sql.get("SELECT `id` FROM `point` WHERE `user_id` = %s", (self.userid)), "shared_to_me": sql.get("SELECT `point_id` FROM `share` WHERE `user_id_to` = %s", (self.userid))}
+        return [True, {"my_points": sql.get("SELECT `id` FROM `point` WHERE `user_id` = %s", (self.userid)), "shared_to_me": sql.get("SELECT `point_id` FROM `share` WHERE `user_id_to` = %s", (self.userid))}]
 
 class point:
     def __init__(self, db_id, userid, key = None, point_id = None, ):
@@ -50,7 +50,7 @@ class point:
         "surname": self.surname,
         "data": self.__getdata()[1]
         }
-        if not self.__user_got_point():
+        if self.__user_got_point():
             ret["shareto"] = self.shareto
         else:
             ret["sharefrom"] = self.sharefrom
@@ -84,8 +84,8 @@ class point:
         self.user = data[5]
         self.key = data[6]
         self.sig_id = data[7]
-        data = sql.get("SELECT mail FROM `user` INNER JOIN `share` ON user.id = share.user_id_to WHERE share.point_id = %s", (self.id))
-        self.shareto = data if data is None else []
+        data = sql.get("SELECT login, mail FROM `user` INNER JOIN `share` ON user.id = share.user_id_to WHERE share.point_id = %s", (self.id))
+        self.shareto = data if data is not None else []
         if not self.__user_got_point():
             self.surname = sql.get("SELECT surname FROM `share` WHERE point_id = %s AND user_id_to = %s", (self.id, self.userask))[0][0]
             self.sharefrom = self.user
@@ -99,11 +99,18 @@ class point:
         return self.infos()
 
     def share(self, mail):
-        if not self.__user_exist():
+        if not self.__user_exist(mail):
             return [False, "user do not exist", 404]
         if not self.__user_got_point():
             return [False, "user do not possess this point", 403]
-        idto = self.__user_exist()
+
+        idto = self.__user_exist(mail)
+
+        if self.__user_is(idto):
+            return [False, "you cannot share to you", 403]
+        if self.__share_with(mail):
+            return [False, "you're already sharing with this user", 403]
+
         succes = sql.input("INSERT INTO `share` (`id`, `user_id_from`, `user_id_to`, `point_id`, `surname`) VALUES (NULL, %s, %s, %s, %s)", \
         (self.userask, idto, self.id, self.name))
         if not succes:
@@ -113,7 +120,7 @@ class point:
 
 
     def __input(self):
-        if not self.__point_exist():
+        if self.__point_exist():
             return [False, "device already registered", 500]
         succes = sql.input("INSERT INTO `point` (`id`, `lng`, `lat`, `name`, `surname`, `user_id`, `key`, `id_key`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s)", \
         (self.lng, self.lat, self.name, self.surname, self.userask, self.key, self.sig_id))
@@ -161,11 +168,20 @@ class point:
     def __user_exist(self, mail):
         if mail != None:
             try:
-                ret =  sql.get("SELECT `id`, `mail` FROM `user` WHERE `mail` = %s", (self.mail))[0]
+                ret =  sql.get("SELECT `id`, `mail` FROM `user` WHERE `mail` = %s", (mail))[0]
                 if ret[1] == mail:
                     return ret[0]
             except:
                 return False
+        return False
+
+    def __user_is(self, id):
+        return (int(self.userask) == int(id))
+
+    def __share_with(self, mail):
+        for i in self.shareto:
+            if i[1] == mail:
+                return True
         return False
 
     def __user_got_point(self):
