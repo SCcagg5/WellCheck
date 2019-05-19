@@ -10,7 +10,7 @@ services:
           environment:
             - PROD=0
           volumes:
-            - ./:/home/api/WellCheck
+            - ./:/home/api/WellCheck #CODE THAT RUN WITHOUT PRODMOD
 
         dbMysql:
           image: mysql:8.0.3
@@ -19,8 +19,8 @@ services:
               MYSQL_ROOT_PASSWORD: 1q2W3e #CONFIG.DB_PASS
               MYSQL_DATABASE: wellcheck #CONFIG.DB_NAME
           volumes:
-            - ./db/db_data:/var/lib/mysql
-            - ./db/mysql-dump:/docker-entrypoint-initdb.d
+            - ./db/db_data:/var/lib/mysql #DB SAVE
+            - ./db/mysql-dump:/docker-entrypoint-initdb.d #DB INIT SQL
 
         front-adm:
            image: adminer

@@ -4,7 +4,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/sccagg5/wellcheck/badge)](https://www.codefactor.io/repository/github/sccagg5/wellcheck)
 [![codebeat badge](https://codebeat.co/badges/510f65fa-c690-475b-a1a4-15d214d4750f)](https://codebeat.co/projects/github-com-sccagg5-wellcheck-master)
 
-### Launch the app: 
+### Launch the app:
 
 ```bash
  git clone https://github.com/SCcagg5/WellCheck/; 		  	`# clone the repo`
@@ -17,14 +17,14 @@
 ### `Dockerfile` comportement:
 
 the api's `dockerfile` is based on python3.7, at launch it:
- * runs in PRODMOD if `$PROD` is ***not set*** or equals ***1***
+ * runs in ***PRODMOD*** if `$PROD` is ***not set*** or equals ***1***
  * installs needed packages from `back-end/requirements.txt` using `pip3`
- * loads ENV from `back-end/CONFIG`
+ * loads ***ENV*** from `back-end/CONFIG`
 
-### PRODMOD: 
+### PRODMOD:
 
-The prod mod ignore the shared volume and `git clone` an actual version of the back-end/src/
- 
+The ***PRODMOD*** ignore the shared volume and `git clone` an actual version of the back-end/src/
+
 ### ENV:
 
 The setup is based on `back-end/CONFIG` it let you define:
@@ -39,10 +39,10 @@ DB_HOST='dbMysql'				`# the host of the mysql database`
 DB_USER='root'					`# the user`
 DB_PASS='1q2W3e'				`# the password of the user`
 DB_NAME='wellcheck' 				`# the database name`
-``` 
+```
 if the `DB_NAME` is changed you must change it also into `db/mysql-dump/mydb.sql` and `docker-compose`
 if the `API_PORT` is change you must change it also into `docker-compose`
-`API_WEBA='*'` is not recommended on PRODMOD
+`API_WEBA='*'` is not recommended
 
 
 ----------
@@ -59,6 +59,23 @@ Routes | Methods | Params | Return |
 `/addpoint/` | POST | mail, token, key, sig_id | id, location, name, surname, data, shareto |
 `/surname/` | POST | mail, token, surname | id, location, name, surname, data, (shareto or sharefrom) |
 `/share/` | POST | mail, token, mail_to, point_id | id, location, name, surname, data, shareto |
+
+### Parameters
+
+```javascript
+{
+  key: 1,                     //(unsigned int | max 99 | min 1)
+  mail: "yourmail@mail.fr",   //(string | max  60 | notchecked)
+  mail_to: "shareto@mail.fr", //(string | max 60 | notchecked)
+  password: "yourpassword",   //(string | max /// | min 6)
+  password2: "yourpassword",  //(string | max /// | min 6)
+  point_id: 1,                //(unsigned int)
+  token: `YOUR_TOKEN`,        //(string | max 256 | min 256)
+  sig_id: `SIG_DEVICE_ID`,    //(string)
+  surname: "mysurname",       //(string | max 256 | min 0)
+}
+```
+
 
 ### Routes's Rules:
 
