@@ -56,8 +56,8 @@ Routes | Methods | Params | Return |
 -|-|-|-|
 `/register/` | POST | mail, password, password2 | login, mail, token |
 `/connect/` | POST | mail, password | login, mail, token |
-`/getall/` | POST | mail, token | my_points, shared_to_me |
-`/getalldetails/` | POST | mail, token | infoson |
+`/allid/` | POST | mail, token | my_points, shared_to_me |
+`/allinfos/` | POST | mail, token | infoson |
 `/infos/` | POST | mail, token, point_id | id, location, name, surname, data, (shareto or sharefrom) |
 `/addpoint/` | POST | mail, token, key, sig_id | id, location, name, surname, data, shareto |
 `/surname/` | POST | mail, token, surname | id, location, name, surname, data, (shareto or sharefrom) |
@@ -196,8 +196,8 @@ Routes | Rules |
 -|-|
 `/register/` | user with the same mail must not exist, <br>passwords must be equals |
 `/connect/` | user must exist, <br>creds(`mail` and `password`) must be right |
-`/getall/` | user must exist, <br>creds(`mail` and `token`) must be right |
-`/getalldetails/` | user must exist, <br>creds(`mail` and `token`) must be right |
+`/allid/` | user must exist, <br>creds(`mail` and `token`) must be right |
+`/allinfos/` | user must exist, <br>creds(`mail` and `token`) must be right |
 `/infos/` | user must exist, <br>creds(`mail` and `token`) must be right, <br>you must possess or have a share on `point_id` |
 `/add_point/`| user must exist, <br>creds(`mail` and `token`) must be right, <br>`sig_id` should be accessible from your backend,sigfox |
 `/surname/` | user must exist, <br>creds(`mail` and `token`) must be right, <br>if `surname` equals `""` it will be set to the original `name` of the device |
@@ -209,8 +209,8 @@ Routes | Body |
 -|-|
 `/register/` | {<br>"mail": "eliot.courtel@wanadoo.fr",<br> "password": "mypasswd",<br> "password2": "mypasswd"<br>} |
 `/connect/` | {<br>"mail": "eliot.courtel@wanadoo.fr",<br> "password": "mypasswd"<br>} |
-`/getall/` | {<br>"mail": "eliot.courtel@wanadoo.fr",<br>"token": `YOUR_TOKEN`<br>} |
-`/getalldetails/` | {<br>"mail": "eliot.courtel@wanadoo.fr",<br>"token": `YOUR_TOKEN`<br>} |
+`/allid/` | {<br>"mail": "eliot.courtel@wanadoo.fr",<br>"token": `YOUR_TOKEN`<br>} |
+`/allinfos/` | {<br>"mail": "eliot.courtel@wanadoo.fr",<br>"token": `YOUR_TOKEN`<br>} |
 `/infos/` | {<br>"mail": "eliot.courtel@wanadoo.fr",<br>"token": `YOUR_TOKEN`,<br>"point_id" : 1<br>} |
 `/addpoint/` | {<br>"mail": "eliot.courtel@wanadoo.fr",<br>"token": `YOUR_TOKEN`, <br>"key": `YOUR_DEVICE_KEY`, <br>"sig_id": `YOUR_DEVICE_ID`<br>} |
 `/surname/` | {<br>"mail": "eliot.courtel@wanadoo.fr",<br>"token": `YOUR_TOKEN`,<br>"surname": "mynewname"<br>} |

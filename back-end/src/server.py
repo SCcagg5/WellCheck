@@ -10,6 +10,20 @@ host = os.getenv('API_HOST', '172.0.0.1')
 port = os.getenv('API_PORT', 8080)
 weba = os.getenv('API_WEBA', '*')
 
+call = lambda x : cn(request).call(x)
+
+@app.route('/test/',        ['OPTIONS', 'POST', 'GET'], lambda x = None: call([])                       )
+@app.route('/register/',    ['OPTIONS', 'POST'],        lambda x = None: call([register])               )
+@app.route('/connect/',     ['OPTIONS', 'POST'],        lambda x = None: call([connect])                )
+@app.route('/addpoint/',    ['OPTIONS', 'POST'],        lambda x = None: call([connect, addpoint])      )
+@app.route('/infos/',       ['OPTIONS', 'POST'],        lambda x = None: call([connect, infos])         )
+@app.route('/share/',       ['OPTIONS', 'POST'],        lambda x = None: call([connect, share])         )
+@app.route('/surname/',     ['OPTIONS', 'POST'],        lambda x = None: call([connect, surname])       )
+@app.route('/allid/',       ['OPTIONS', 'POST'],        lambda x = None: call([connect, getall])        )
+@app.route('/allinfos/',    ['OPTIONS', 'POST'],        lambda x = None: call([connect, getalldetails]) )
+def base():
+    return
+
 @app.hook('after_request')
 def enable_cors():
     response.headers['Access-Control-Allow-Origin'] = weba
@@ -26,44 +40,10 @@ def error(error):
     response.content_type = 'application/json'
     return JSON.dumps(toret.ret())
 
-@app.route('/test/',            method=['OPTIONS', 'POST', 'GET'])
-def base():
-    return cn(request).call([])
 
-@app.route('/register/',        method=['OPTIONS', 'POST'])
-def base():
-    return cn(request).call([register])
-
-@app.route('/connect/',         method=['OPTIONS', 'POST'])
-def base():
-    return cn(request).call([connect])
-
-@app.route('/addpoint/',        method=['OPTIONS', 'POST'])
-def base():
-    return cn(request).call([connect, addpoint])
-
-@app.route('/infos/',           method=['OPTIONS', 'POST'])
-def base():
-    return cn(request).call([connect, infos])
-
-@app.route('/share/',           method=['OPTIONS', 'POST'])
-def base():
-    return cn(request).call([connect, share])
-
-@app.route('/surname/',         method=['OPTIONS', 'POST'])
-def base():
-    return cn(request).call([connect, surname])
-
-@app.route('/getall/',          method=['OPTIONS', 'POST'])
-def base():
-    return cn(request).call([connect, getall])
-
-@app.route('/getalldetails/',   method=['OPTIONS', 'POST'])
-def base():
-    return cn(request).call([connect, getalldetails])
 
 if __name__ == '__main__':
-        try:
-            run(app, host=host, port=port, debug=True)
-        except:
-            os._exit(0)
+    try:
+        run(app, host=host, port=port, debug=True)
+    except:
+        os._exit(0)
