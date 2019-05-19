@@ -81,67 +81,15 @@ Routes | Methods | Params | Return |
 
 ### Returns Exemples
 
-* `TOKEN` :
-```javascript
-"token": "66a5452d001d4fbada0a3a0848bf4073a4c35f989d64837a43ab8848ea8969c7cc2f00c749b0adfa6968663b6fba75a77dfee54f67424738668e5d807d23cf7c"
-```
 
-* `ID` :
+* `ACCELERATION` :
 ```javascript
-"id": 1
-```
-
-* `LOCATION` :
-```javascript
-"location": {
-              "lat": 1,
-              "lng": 1
-            }
-```
-
-* `NAME` :
-```javascript
-"name": "myname"
-```
-
-* `DATE` :
-```javascript
-"date": 1558275696
-```
-
-* `HUMIDITY` :
-```javascript
-"humidity": 123
-```
-
-* `TURBIDITY` :
-```javascript
-"turbidity": 12.34
+  "acceleration": 123
 ```
 
 * `CONDUCTANCE` :
 ```javascript
 "conductance": 1234
-```
-
-* `PH` :
-```javascript
-"ph": 1.23
-```
-
-* `PRESSION` :
-```javascript
-"presion": 1234.56
-```
-
-* `TEMPERATURE` :
-```javascript
-  "temperature": 12.3
-```
-
-* `ACCELERATION` :
-```javascript
-  "acceleration": 123
 ```
 
 * `DATA` :
@@ -160,7 +108,30 @@ Routes | Methods | Params | Return |
 ]
 ```
 
-* `MY_POINTS` && `SHARED_TO_ME` :
+* `DATE` :
+```javascript
+"date": 1558275696
+```
+
+* `HUMIDITY` :
+```javascript
+"humidity": 123
+```
+
+* `ID` :
+```javascript
+"id": 1
+```
+
+* `LOCATION` :
+```javascript
+"location": {
+              "lat": 1,
+              "lng": 1
+            }
+```
+
+* `MY_POINTS` :
 ```javascript
 "my_points" : [
     {
@@ -171,7 +142,26 @@ Routes | Methods | Params | Return |
       "data": [DATA],
       "shareto": [USER_ID]
     }
-],
+]
+```
+
+* `NAME` :
+```javascript
+"name": "myname"
+```
+
+* `PH` :
+```javascript
+"ph": 1.23
+```
+
+* `PRESSION` :
+```javascript
+"presion": 1234.56
+```
+
+* `SHARED_TO_ME` :
+```javascript
 "shared_to_me" : [
     {
       "id": ID,
@@ -184,6 +174,20 @@ Routes | Methods | Params | Return |
 ]
 ```
 
+* `TEMPERATURE` :
+```javascript
+  "temperature": 12.3
+```
+
+* `TOKEN` :
+```javascript
+"token": "66a5452d001d4fbada0a3a0848bf4073a4c35f989d64837a43ab8848ea8969c7cc2f00c749b0adfa6968663b6fba75a77dfee54f67424738668e5d807d23cf7c"
+```
+
+* `TURBIDITY` :
+```javascript
+"turbidity": 12.34
+```
 
 
 ### Routes's Rules:

@@ -76,14 +76,18 @@ class point:
             self.lng = data['location']['lng']
             self.name = data['name']
         except:
-            return [False, "Wrong ID", 500]
+            return [False, "Invalid sig_id", 500]
         self.surname = self.name
         return self.__input()
 
     def fromdbinfo(self):
         if self.id is None:
             self.id = sql.get("SELECT `id` FROM `point` WHERE `id_key` = %s", (self.sig_id))[0][0]
-        data = sql.get("SELECT * FROM `point` WHERE `id` = %s", (self.id))[0]
+        data = sql.get("SELECT * FROM `point` WHERE `id` = %s", (self.id))
+        if len(data) == 0:
+            self.err = [False, "Invalid point_id", 400]
+            return
+        data = data[0]
         if data is None:
             return
         self.lat = data[1]
@@ -130,7 +134,7 @@ class point:
 
     def __input(self):
         if self.__point_exist():
-            return [False, "device already registered", 500]
+            return [False, "device already registered", 403]
         succes = sql.input("INSERT INTO `point` (`id`, `lng`, `lat`, `name`, `surname`, `user_id`, `key`, `id_key`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s)", \
         (self.lng, self.lat, self.name, self.surname, self.userask, self.key, self.sig_id))
         if succes:
@@ -168,8 +172,7 @@ class point:
         if self.sig_id != None:
             try:
                 point_id = sql.get("SELECT `id` FROM `point` WHERE `id_key` = %s", (self.sig_id))[0][0]
-                if point_id == self.id:
-                    return True
+                return True
             except:
                 return False
         return False
