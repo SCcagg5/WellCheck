@@ -21,6 +21,7 @@ CREATE TABLE `data` (
   `conductance` int(11) NOT NULL,
   `ph` float NOT NULL,
   `pression` float NOT NULL,
+  `temperature` float NOT NULL,
   `acceleration` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
