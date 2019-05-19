@@ -158,8 +158,8 @@ class point:
     def __point_exist(self):
         if self.sig_id != None:
             try:
-                id = sql.get("SELECT `id` FROM `point` WHERE `id_key` = %s", (self.sig_id))[0][0]
-                if id == self.id:
+                point_id = sql.get("SELECT `id` FROM `point` WHERE `id_key` = %s", (self.sig_id))[0][0]
+                if point_id == self.id:
                     return True
             except:
                 return False
@@ -175,8 +175,8 @@ class point:
                 return False
         return False
 
-    def __user_is(self, id):
-        return (int(self.userask) == int(id))
+    def __user_is(self, user_id):
+        return (int(self.userask) == int(user_id))
 
     def __share_with(self, mail):
         for i in self.shareto:
