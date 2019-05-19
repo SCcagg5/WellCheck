@@ -63,7 +63,7 @@ Routes | Methods | Params | Return |
 
 ### Parameters
 
-```perl
+```Perl
 {
   key: 1,                     //(unsigned int | max  99 | min   1)
   mail: "yourmail@mail.fr",   //(string       | max  60 | notchecked)
@@ -80,17 +80,17 @@ Routes | Methods | Params | Return |
 ### Returns Exemples
 
 * `TOKEN` :
-```perl
+```Perl
 "token": "66a5452d001d4fbada0a3a0848bf4073a4c35f989d64837a43ab8848ea8969c7cc2f00c749b0adfa6968663b6fba75a77dfee54f67424738668e5d807d23cf7c"
 ```
 
 * `ID` :
-```perl
+```Perl
 "id": 1
 ```
 
 * `LOCATION` :
-```perl
+```Perl
 "location": {
               "lat": 1,
               "lng": 1
@@ -98,52 +98,52 @@ Routes | Methods | Params | Return |
 ```
 
 * `NAME` :
-```perl
+```Perl
 "name": "myname"
 ```
 
 * `DATE` :
-```perl
+```Perl
 "date": 1558275696
 ```
 
 * `HUMIDITY` :
-```perl
+```Perl
 "humidity": 123
 ```
 
 * `TURBIDITY` :
-```perl
+```Perl
 "turbidity": 12.34
 ```
 
 * `CONDUCTANCE` :
-```perl
+```Perl
 "conductance": 1234
 ```
 
 * `PH` :
-```perl
+```Perl
 "ph": 1.23
 ```
 
 * `PRESSION` :
-```perl
+```Perl
 "presion": 1234.56
 ```
 
 * `TEMPERATURE` :
-```perl
+```Perl
   "temperature": 12.3
 ```
 
 * `ACCELERATION` :
-```perl
+```Perl
   "acceleration": 123
 ```
 
 * `DATA` :
-```perl
+```Perl
 "data": [
   {
     "date": TIMESTAMP,
@@ -159,7 +159,7 @@ Routes | Methods | Params | Return |
 ```
 
 * `MY_POINTS` && `SHARED_TO_ME` :
-```perl
+```Perl
 "my_points" : [
     {
       "id": ID,
