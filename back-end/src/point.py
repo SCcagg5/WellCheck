@@ -15,6 +15,15 @@ class points:
     def getall(self):
         return [True, {"my_points": sql.get("SELECT `id` FROM `point` WHERE `user_id` = %s", (self.userid)), "shared_to_me": sql.get("SELECT `point_id` FROM `share` WHERE `user_id_to` = %s", (self.userid))}]
 
+    def getalldetails(self):
+        ret = {"my_points": [], "shared_to_me": []}
+        points = self.getall()[1]
+        for i in ["my_points", "shared_to_me"]:
+            for p in points[i]:
+                to_add = point(p[0], self.userid).infos()[1]
+                ret[i].append(to_add)
+        return [True, ret, None]
+
 class point:
     def __init__(self, db_id, userid, key = None, point_id = None, ):
         self.id = db_id
