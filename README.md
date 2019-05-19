@@ -64,15 +64,15 @@ Routes | Methods | Params | Return |
 
 ```javascript
 {
-  key: 1,                     //(unsigned int | max 99 | min 1)
-  mail: "yourmail@mail.fr",   //(string | max  60 | notchecked)
-  mail_to: "shareto@mail.fr", //(string | max 60 | notchecked)
-  password: "yourpassword",   //(string | max /// | min 6)
-  password2: "yourpassword",  //(string | max /// | min 6)
+  key: 1,                     //(unsigned int | max  99 | min   1)
+  mail: "yourmail@mail.fr",   //(string       | max  60 | notchecked)
+  mail_to: "shareto@mail.fr", //(string       | max  60 | notchecked)
+  password: "yourpassword",   //(string       | max /// | min   6)
+  password2: "yourpassword",  //(string       | max /// | min   6)
   point_id: 1,                //(unsigned int)
-  token: `YOUR_TOKEN`,        //(string | max 256 | min 256)
+  token: `YOUR_TOKEN`,        //(string       | max 256 | min 256)
   sig_id: `SIG_DEVICE_ID`,    //(string)
-  surname: "mysurname",       //(string | max 256 | min 0)
+  surname: "mysurname",       //(string       | max 256 | min   0)
 }
 ```
 
