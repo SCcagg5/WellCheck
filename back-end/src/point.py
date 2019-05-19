@@ -91,7 +91,7 @@ class point:
             self.sharefrom = self.user
 
     def rename(self, surname):
-        if surname is "":
+        if surname == "":
             surname = self.name
         self.surname = surname
         self.__update()
