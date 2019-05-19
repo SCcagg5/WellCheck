@@ -26,39 +26,39 @@ def error(error):
     response.content_type = 'application/json'
     return JSON.dumps(toret.ret())
 
-@app.route('/test/', method=['OPTIONS', 'POST', 'GET'])
+@app.route('/test/',            method=['OPTIONS', 'POST', 'GET'])
 def base():
     return cn(request).call([])
 
-@app.route('/register/', method=['OPTIONS', 'POST'])
+@app.route('/register/',        method=['OPTIONS', 'POST'])
 def base():
     return cn(request).call([register])
 
-@app.route('/connect/', method=['OPTIONS', 'POST'])
+@app.route('/connect/',         method=['OPTIONS', 'POST'])
 def base():
     return cn(request).call([connect])
 
-@app.route('/addpoint/', method=['OPTIONS', 'POST'])
+@app.route('/addpoint/',        method=['OPTIONS', 'POST'])
 def base():
     return cn(request).call([connect, addpoint])
 
-@app.route('/infos/', method=['OPTIONS', 'POST'])
+@app.route('/infos/',           method=['OPTIONS', 'POST'])
 def base():
     return cn(request).call([connect, infos])
 
-@app.route('/share/', method=['OPTIONS', 'POST'])
+@app.route('/share/',           method=['OPTIONS', 'POST'])
 def base():
     return cn(request).call([connect, share])
 
-@app.route('/surname/', method=['OPTIONS', 'POST'])
+@app.route('/surname/',         method=['OPTIONS', 'POST'])
 def base():
     return cn(request).call([connect, surname])
 
-@app.route('/getall/', method=['OPTIONS', 'POST'])
+@app.route('/getall/',          method=['OPTIONS', 'POST'])
 def base():
     return cn(request).call([connect, getall])
 
-@app.route('/getalldetails/', method=['OPTIONS', 'POST'])
+@app.route('/getalldetails/',   method=['OPTIONS', 'POST'])
 def base():
     return cn(request).call([connect, getalldetails])
 
