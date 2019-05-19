@@ -55,6 +55,7 @@ Routes | Methods | Params | Return |
 `/register/` | POST | mail, password, password2 | login, mail, token |
 `/connect/` | POST | mail, password | login, mail, token |
 `/getall/` | POST | mail, token | my_points, shared_to_me |
+`/getalldetails/` | POST | mail, token | infoson |
 `/infos/` | POST | mail, token, point_id | id, location, name, surname, data, (shareto or sharefrom) |
 `/addpoint/` | POST | mail, token, key, sig_id | id, location, name, surname, data, shareto |
 `/surname/` | POST | mail, token, surname | id, location, name, surname, data, (shareto or sharefrom) |
@@ -76,6 +77,112 @@ Routes | Methods | Params | Return |
 }
 ```
 
+### Returns Exemples
+
+* `TOKEN` :
+```javascript
+"token": "66a5452d001d4fbada0a3a0848bf4073a4c35f989d64837a43ab8848ea8969c7cc2f00c749b0adfa6968663b6fba75a77dfee54f67424738668e5d807d23cf7c"
+```
+
+* `ID` :
+```javascript
+"id": 1
+```
+
+* `LOCATION` :
+```javascript
+"location": {
+              "lat": 1,
+              "lng": 1
+            }
+```
+
+* `NAME` :
+```javascript
+"name": "myname"
+```
+
+* `DATE` :
+```javascript
+"date": 1558275696
+```
+
+* `HUMIDITY` :
+```javascript
+"humidity": 123
+```
+
+* `TURBIDITY` :
+```javascript
+"turbidity": 12.34
+```
+
+* `CONDUCTANCE` :
+```javascript
+"conductance": 1234
+```
+
+* `PH` :
+```javascript
+"ph": 1.23
+```
+
+* `PRESSION` :
+```javascript
+"presion": 1234.56
+```
+
+* `TEMPERATURE` :
+```javascript
+  "temperature": 12.3
+```
+
+* `ACCELERATION` :
+```javascript
+  "acceleration": 123
+```
+
+* `DATA` :
+```javascript
+"data": [
+  {
+    "date": TIMESTAMP,
+    "humidity": HUMIDITY,
+    "turbidity": TURBIDITY,
+    "conductance": CONDUCTANCE,
+    "ph": PH,
+    "pression": PRESSION,
+    "temperature": TEMPERATURE,
+    "acceleration": ACCELERATION
+  }
+]
+```
+
+* `MY_POINTS` && `SHARED_TO_ME` :
+```javascript
+"my_points" : [
+    {
+      "id": ID,
+      "location": LOCATION{},
+      "name": NAME,
+      "surname": SURNAME,
+      "data": [DATA],
+      "shareto": [USER_ID]
+    }
+],
+"shared_to_me" : [
+    {
+      "id": ID,
+      "location": LOCATION{},
+      "name": NAME,
+      "surname": SURNAME,
+      "data": [DATA],
+      "sharefrom": USER_ID
+    }
+]
+```
+
+
 
 ### Routes's Rules:
 
@@ -84,6 +191,7 @@ Routes | Rules |
 `/register/` | user with the same mail must not exist, <br>passwords must be equals |
 `/connect/` | user must exist, <br>creds(`mail` and `password`) must be right |
 `/getall/` | user must exist, <br>creds(`mail` and `token`) must be right |
+`/getalldetails/` | user must exist, <br>creds(`mail` and `token`) must be right |
 `/infos/` | user must exist, <br>creds(`mail` and `token`) must be right, <br>you must possess or have a share on `point_id` |
 `/add_point/`| user must exist, <br>creds(`mail` and `token`) must be right, <br>`sig_id` should be accessible from your backend,sigfox |
 `/surname/` | user must exist, <br>creds(`mail` and `token`) must be right, <br>if `surname` equals `""` it will be set to the original `name` of the device |
@@ -96,6 +204,7 @@ Routes | Body |
 `/register/` | {<br>"mail": "eliot.courtel@wanadoo.fr",<br> "password": "mypasswd",<br> "password2": "mypasswd"<br>} |
 `/connect/` | {<br>"mail": "eliot.courtel@wanadoo.fr",<br> "password": "mypasswd"<br>} |
 `/getall/` | {<br>"mail": "eliot.courtel@wanadoo.fr",<br>"token": `YOUR_TOKEN`<br>} |
+`/getalldetails/` | {<br>"mail": "eliot.courtel@wanadoo.fr",<br>"token": `YOUR_TOKEN`<br>} |
 `/infos/` | {<br>"mail": "eliot.courtel@wanadoo.fr",<br>"token": `YOUR_TOKEN`,<br>"point_id" : 1<br>} |
 `/addpoint/` | {<br>"mail": "eliot.courtel@wanadoo.fr",<br>"token": `YOUR_TOKEN`, <br>"key": `YOUR_DEVICE_KEY`, <br>"sig_id": `YOUR_DEVICE_ID`<br>} |
 `/surname/` | {<br>"mail": "eliot.courtel@wanadoo.fr",<br>"token": `YOUR_TOKEN`,<br>"surname": "mynewname"<br>} |
