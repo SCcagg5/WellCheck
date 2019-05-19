@@ -41,7 +41,9 @@ DB_PASS='1q2W3e'				`# the password of the user`
 DB_NAME='wellcheck' 				`# the database name`
 ```
 if the `DB_NAME` is changed you must change it also into `db/mysql-dump/mydb.sql` and `docker-compose`
+
 if the `API_PORT` is change you must change it also into `docker-compose`
+
 `API_WEBA='*'` is not recommended
 
 
