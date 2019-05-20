@@ -27,15 +27,14 @@ def base():
 @app.hook('after_request')
 def enable_cors():
     response.headers['Access-Control-Allow-Origin'] = weba
-    response.headers['Access-Control-Allow-Methods'] = 'PUT, GET, POST, DELETE, OPTIONS'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
     response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
 
 
 @app.error()
 @app.error(404)
 def error(error):
-    params = check.json(request)
-    toret = ret(request.path, params)
+    toret = ret(request.path, check.json(request))
     toret.add_error(error.body, int(error.status.split(" ")[0]))
     response.content_type = 'application/json'
     return JSON.dumps(toret.ret())
