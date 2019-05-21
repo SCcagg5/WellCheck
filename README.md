@@ -79,6 +79,21 @@ Routes | Methods | Params | Return |
 }
 ```
 
+### Return template
+
+```javascript
+{
+    "queryInfos": {
+        "route": "/test/",
+        "params": []
+    },
+    "status": 200,
+    "error": null,
+    "data": null,
+    "succes": true
+}
+```
+
 ### Returns Exemples
 
 
