@@ -3,14 +3,32 @@ import os
 import json as JSON
 from requests.auth import HTTPBasicAuth
 from sql import sql
+import time
 
 
 login = os.getenv('SIGFOX_LOG', None)
 password = os.getenv('SIGFOX_PASS', None)
 
+base = 1558441138
+last = -1
+
+def updateall(number):
+    authentication = (login, password)
+    r = requests.get(
+    "https://api.sigfox.com/v2/devices/" + self.sig_id  + "/messagess",
+     auth=HTTPBasicAuth(login, password))
+    data = JSON.loads(r.text)
+    return self.__input()
+
+
 class points:
     def __init__(self, userid):
         self.userid = userid
+        date = int(round(time.time()))
+        number = (date - base) % (30 * 60)
+        if (last < number):
+            last = number
+            updateall(number)
 
     def getall(self):
         return [True, {"my_points": sql.get("SELECT `id` FROM `point` WHERE `user_id` = %s", (self.userid)), "shared_to_me": sql.get("SELECT `point_id` FROM `share` WHERE `user_id_to` = %s", (self.userid))}]
@@ -38,6 +56,11 @@ class point:
         self.surname = None
         self.sharefrom = None
         self.shareto = []
+        date = int(round(time.time()))
+        number = (date - base) % (30 * 60)
+        if (last < number):
+            last = number
+            updateall(number)
         self.getinfos()
 
 
@@ -91,7 +114,7 @@ class point:
         if data is None:
             return
         self.lat = data[1]
-        self.lng = data[0]
+        self.lng = data[2]
         self.name = data[3]
         self.surname = data[4]
         self.user = data[5]

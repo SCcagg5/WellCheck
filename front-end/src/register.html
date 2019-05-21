@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en" class="fullscreen-bg">
+
+<head>
+	<title>Login | Klorofil - Free Bootstrap Dashboard Template</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<!-- VENDOR CSS -->
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="assets/vendor/linearicons/style.css">
+	<!-- MAIN CSS -->
+	<link rel="stylesheet" href="assets/css/main.css">
+	<!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
+	<link rel="stylesheet" href="assets/css/demo.css">
+	<!-- GOOGLE FONTS -->
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+	<!-- ICONS -->
+	<link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
+</head>
+
+<body>
+	<!-- WRAPPER -->
+	<div id="wrapper" >
+    <div id="map" style="filter: blur(3px);-webkit-filter: blur(3px);height: 100vh; overflow: hidden">
+		</div>
+		<div class="vertical-align-wrap" id="login" style="position: absolute;top: 0px;background: rgba(0,0,0,0.3); padding: 0px">
+			<div class="vertical-align-middle">
+				<div class="auth-box lockscreen" style="height: auto;">
+						<div class="content">
+								<img class="logo" src='assets/img/logo.png' style="margin-left: calc((100% - 250px) /2);width: 250px"></img>
+							<form class="form-auth-small" action="index.php" >
+								<div class="form-group">
+									<label for="signin-email" class="control-label sr-only">Email</label>
+									<input type="email" class="form-control" id="signin-email" placeholder="Email"  v-model="mail">
+								</div>
+								<div class="form-group">
+									<label for="signin-password" class="control-label sr-only">Mot de passe</label>
+									<input type="password" class="form-control" id="signin-password"  placeholder="Mot de passe" v-model="password">
+								</div>
+								<div class="form-group">
+									<label for="signin-password" class="control-label sr-only">Mot de passe</label>
+									<input type="password" class="form-control" id="signin-password"  placeholder="Confirmer le Mot de passe" v-model="password2">
+								</div>
+								<div class="row">
+ 										<div class="col-md-auto align-self-center" style="text-align: center">
+ 											<button type="button" class="btn btn-primary btn-block" v-on:click="log()">Connexion</button>
+											<br>
+                      <a href="login.html">S'enregistrer</a>
+ 										</div>
+								</div>
+							</form>
+						</div>
+					</div><br><br>
+					<div style="width:400px; margin: auto;" v-html=error>
+					</div>
+				</div>
+
+			</div>
+		</div>
+    <script>
+        var map;
+        function initMap() {
+          map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 48.813896, lng: 2.392448},
+            zoom: 14,
+  					 minZoom: 6,
+  					streetViewControl: false,
+  					mapTypeControl: false,
+  					fullscreenControl: false,
+						scaleControl: false,
+						rotateControl: false,
+						zoomControl: false,
+  					styles:[{"featureType":"administrative","elementType":"all","stylers":[{"saturation":"-100"},{"visibility":"simplified"}]},{"featureType":"landscape","elementType":"all","stylers":[{"saturation":-100},{"lightness":65},{"visibility":"on"}]},{"featureType":"poi","elementType":"all","stylers":[{"saturation":"-100"},{"lightness":"50"},{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":"-100"},{"visibility":"on"}]},{"featureType":"road","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road.arterial","elementType":"all","stylers":[{"lightness":"30"}]},{"featureType":"road.local","elementType":"all","stylers":[{"lightness":"40"}]},{"featureType":"transit","elementType":"all","stylers":[{"saturation":-100},{"visibility":"off"}]},{"featureType":"water","elementType":"geometry","stylers":[{"hue":"#ffff00"},{"lightness":-25},{"saturation":-97},{"visibility":"on"}]},{"featureType":"water","elementType":"labels","stylers":[{"lightness":-25},{"saturation":-100},{"visibility":"off"}]}]
+          });
+        }
+      </script>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAf5fgt1fAk0_AAKMCMe1bFOQUg89lhtWU&callback=initMap"
+      async defer></script>
+	<!-- END WRAPPER -->
+	<script src="assets/vendor/jquery/jquery.min.js"></script>
+	<script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="assets/scripts/klorofil-common.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+  <script src="./js/register.js"></script>
+</body>
+
+</html>

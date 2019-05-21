@@ -12,6 +12,15 @@ services:
           volumes:
             - ./:/home/api/WellCheck #CODE THAT RUN WITHOUT PRODMOD
 
+        frt-end:
+          build: ./front-end
+          ports:
+            - 80:8080
+          environment:
+            - PROD=0
+          volumes:
+            - ./:/home/front/WellCheck
+
         dbMysql:
           image: mysql:8.0.3
           restart: always
