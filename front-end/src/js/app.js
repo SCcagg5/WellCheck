@@ -61,7 +61,7 @@ var my_app = new Vue({
 
         for (var i = 0; i < this.my_points.length; i++){
           var icon = {
-            url: "../assets/img/float.svg",
+            url: "https://eliotctl.fr/WellCheck/assets/img/float.svg",
             scaledSize: new google.maps.Size(40, 40)
           }
           var myLatlng = new google.maps.LatLng(this.my_points[i].location.lat,this.my_points[i].location.lng);
@@ -79,7 +79,7 @@ var my_app = new Vue({
         }
         for (; i < this.my_points.length + this.shared_to_me.length; i++){
           var icon = {
-            url: "../assets/img/floatred.png",
+            url: "https://eliotctl.fr/WellCheck/assets/img/floatred.png",
             scaledSize: new google.maps.Size(40, 40)
           }
           j = i - this.my_points.length
