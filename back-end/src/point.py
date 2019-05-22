@@ -9,16 +9,58 @@ import time
 login = os.getenv('SIGFOX_LOG', None)
 password = os.getenv('SIGFOX_PASS', None)
 
-base = 1558441138
+base = 1558515793000
 last = -1
 
+
 def updateall(number):
-    authentication = (login, password)
-    r = requests.get(
-    "https://api.sigfox.com/v2/devices/" + self.sig_id  + "/messagess",
-     auth=HTTPBasicAuth(login, password))
-    data = JSON.loads(r.text)
-    return self.__input()
+    try:
+        limit = sql.get("SELECT `date` FROM data ORDER BY `date` DESC", None)[0][0]
+    except:
+        limit = base
+    devices = sql.get("SELECT id_key, id from point", None)
+    date = int(round(time.time()) * 1000)
+    for i in devices:
+        url = "https://api.sigfox.com/v2/devices/"+str(i[0])+"/messages"
+        r = requests.get(url, auth=HTTPBasicAuth(login, password))
+        data = JSON.loads(r.text)["data"]
+        for j in data:
+            trame = str(int(j["data"], 16))[1:-1]
+            if len(trame) > 1 and int(j["time"]) > int(limit):
+                datas = loaddata(trame, int(j["time"]))
+                addtodb(datas, i[1])
+    return
+
+def loaddata(trame, date):
+    ret = {"type": None, "data": None}
+    if len(trame) == 12:
+        ret["type"] = "GPS"
+        ret["data"] = {
+            "lng": int(trame[0: 6]) / 10000,
+            "lat": int(trame[6: 12]) / 10000
+        }
+    elif len(trame) == 29:
+        ret["type"] = "DATA"
+        ret["data"] = {
+            "date": date,
+            "humidity": int(trame[0:3]),
+            "turbidity": int(trame[3:7]) / 100,
+            "conductance": int(trame[7:11]) / 100,
+            "ph": int(trame[11:14]) / 100,
+            "pression": int(trame[14:22]) / 100,
+            "temperature": int(trame[22:25]) / 10,
+            "acceleration": (1 if int(trame[25:26]) == 1 else -1) * int(trame[26:29])
+        }
+    return ret
+
+def addtodb(data, id):
+    if data["type"] == "DATA":
+        sql.input("INSERT INTO `data` (`point_id`, `date`, `humidity`, `turbidity`, `conductance`, `ph`, `pression`, `temperature`, `acceleration`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);" ,
+        (id, data["data"]["date"], data["data"]["humidity"], data["data"]["turbidity"], data["data"]["conductance"], data["data"]["ph"], data["data"]["pression"], data["data"]["temperature"], data["data"]["acceleration"]))
+    elif data["type"] == "GPS":
+        sql.input("UPDATE `point` SET `lng` = %s, `lat` = %s WHERE `id` = %s;", \
+        (data["data"]["lng"], data["data"]["lat"], id))
+    return
 
 
 class points:
@@ -27,7 +69,6 @@ class points:
         date = int(round(time.time()))
         number = (date - base) % (30 * 60)
         if (last < number):
-            last = number
             updateall(number)
 
     def getall(self):
@@ -59,7 +100,6 @@ class point:
         date = int(round(time.time()))
         number = (date - base) % (30 * 60)
         if (last < number):
-            last = number
             updateall(number)
         self.getinfos()
 
@@ -85,7 +125,7 @@ class point:
         if self.__user_got_point():
             ret["shareto"] = self.shareto
         else:
-            ret["sharefrom"] = self.sharefrom
+            ret["sharefrom"] = sql.get("SELECT `login`, `mail` FROM `user` WHERE `id` = %s", (self.sharefrom))[0]
         return [True, ret, None]
 
     def fromapiinfo(self):
@@ -175,7 +215,8 @@ class point:
                 "conductance": i[5],
                 "ph": i[6],
                 "pression": i[7],
-                "acceleration": i[8]
+                "temperature": i[8],
+                "acceleration": i[9]
             }
             ret.append(b)
         return [True, ret, None]
