@@ -20,15 +20,18 @@ def updateall(number):
         limit = base
     devices = sql.get("SELECT id_key, id from point", None)
     date = int(round(time.time()) * 1000)
-    for i in devices:
-        url = "https://api.sigfox.com/v2/devices/"+str(i[0])+"/messages"
-        r = requests.get(url, auth=HTTPBasicAuth(login, password))
-        data = JSON.loads(r.text)["data"]
-        for j in data:
-            trame = str(int(j["data"], 16))[1:-1]
-            if len(trame) > 1 and int(j["time"]) > int(limit):
-                datas = loaddata(trame, int(j["time"]))
-                addtodb(datas, i[1])
+    try:
+        for i in devices:
+            url = "https://api.sigfox.com/v2/devices/"+str(i[0])+"/messages"
+            r = requests.get(url, auth=HTTPBasicAuth(login, password))
+            data = JSON.loads(r.text)["data"]
+            for j in data:
+                trame = str(int(j["data"], 16))[1:-1]
+                if len(trame) > 1 and int(j["time"]) > int(limit):
+                    datas = loaddata(trame, int(j["time"]))
+                    addtodb(datas, i[1])
+    except:
+        return
     return
 
 def loaddata(trame, date):
