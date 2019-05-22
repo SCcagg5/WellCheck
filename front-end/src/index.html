@@ -21,6 +21,10 @@
 	[v-cloak] {
   display: none;
 }
+
+th {
+	text-align: center
+}
 	</STYLE>
 </head>
 
@@ -35,6 +39,11 @@
 			<button v-if="!pointadd" v-on:click="pointadd = !pointadd" type="button" style="position: absolute; top: -60px; right: 15px; height: 60px;width: 60px; background-color: rgba(200, 200, 200, 1); border-radius: 90%">
 				<p style="position: absolute; top: -22px; left: 10px;font-size: 70px; color: white"><b>+</b></p>
 			</button>
+			<button v-if="!share" v-on:click="if (my_points.length != 0){share = true} else {setuperror('You have no points to share')}" type="button" style="position: absolute; top: -60px; left: 15px; height: 60px;width: 60px; background-color: rgba(200, 200, 200, 1); border-radius: 90%">
+				<p style="position: absolute; top: 2px; left: 8px;font-size: 30px; color: white"><b>&#128101</b></p>
+			</button>
+			<div style="position: absolute; top: calc(100vh - 200px); left: calc((100vw - 400px) / 2); color: white; width: 400px" v-html=error>
+			</div>
 			<div class="main-content" style="margin-left: 45px;margin-right: 45px;padding: 0px">
 				<div class="container-fluid" v-cloak>
 					<div class="row">
@@ -70,49 +79,160 @@
 									</div>
 								</div>
 							</div>
-							<div v-if=" !pointadd && info.surname != null" class="panel" style="margin-top: 25px;">
+							<div v-if="share" style="position: absolute;top: -75px;left: -45px;background: rgba(0,0,0,0.8); width: 100vw; height: 100vh;">
+								<div class="container-fluid"  v-cloak>
+									<div class="row" style="margin-top: calc((100vh - 450px)/2);">
+										<div  class="col-md-4"></div>
+										<div  class="col-md-4" style="margin: auto;">
+											<div class="panel" style="height: 450px">
+												<div class="panel-heading">
+													<div class="right">
+														<button type="button" v-on:click="share = false" class="btn-remove"><i class="lnr lnr-cross"></i></button>
+													</div>
+												</div>
+												<div class="row">
+													<div  class="col-md-3"></div>
+													<div  class="col-md-6">
+														<div style="margin-top: 10px">
+															<p style="font-size: 21px;text-align: center">Partagez votre flotteur WellCheck</p>
+															<br>
+															<input type="text" class="form-control" placeholder="Mail" v-model="mail_to_share">
+															<br>
+															<select class="form-control" v-model="point_id_share">
+																<option disabled value="0">Vos appareils</option>
+    														<option v-for="point in my_points" value="{{point['id']}}">{{point['surname']}}</option>
+															</select>
+															<br>
+					 										<button type="button"  v-on:click="sharepoint()" class="btn btn-block" v-bind:class="point_id_share != 0 && mail_to_share != '' ? 'btn-primary' : 'btn-default'">Ajouter</button>
+														</div>
+														<br>
+													<div v-if="my_points[point_id_share].shareto.length > 0">
+														Partagé a :
+														<table class="table table-striped">
+															<thead>
+																<tr>
+																	<th>user</th>
+																	<th>mail</th>
+																</tr>
+															</thead>
+															<tbody v-for="i in my_points[point_id_share].shareto">
+																<td>{{i[0]}}</td>
+																<td>{{i[1]}}</d>
+															</tbody>
+														</table>
+													</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div v-if=" !pointadd && !share && info.surname != null" class="panel" style="margin-top: 25px;">
 								<div class="panel-heading">
 									<h3 class="panel-title">{{ info.surname }}
 									<div class="progress" style="margin: auto; margin-top: -20px;width: 50%; min-width: 100px; max-width: 300px">
 										<div v-if="note > 7" class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100" v-bind:style="'width: ' + (note * 10) + '%'">
-											<span class="sr-only"></span>
+											{{note}} / 10
 										</div>
 										<div v-if="note > 4 && note <= 7" class="progress-bar progress-bar-warning" role="progressbar" aria-valuemin="0" aria-valuemax="100" v-bind:style="'width: ' + (note * 10) + '%'">
-											<span class="sr-only"></span>
+											{{note}} / 10
 										</div>
 										<div v-if="note <= 4" class="progress-bar progress-bar-danger" role="progressbar" aria-valuemin="0" aria-valuemax="100" v-bind:style="'width: ' + (note * 10) + '%'">
-											<span class="sr-only"></span>
+											{{note}} / 10
 										</div>
-										{{note}} / 10
 									</div>
 									</h3>
 										<div class="right">
-										<button type="button" v-on:click="close = !close" class="btn-toggle-collapse"><i v-if="close" class="lnr lnr-chevron-up"></i><i v-if="!close" class="lnr lnr-chevron-down"></i></button>
+										<button type="button" v-on:click="close = !close; pointstat = false" class="btn-toggle-collapse"><i v-if="close" class="lnr lnr-chevron-up"></i><i v-if="!close" class="lnr lnr-chevron-down"></i></button>
 										<button type="button" v-on:click="info.surname = null" class="btn-remove"><i class="lnr lnr-cross"></i></button>
 									</div>
 								</div>
-								<div class="panel-body no-padding text-center" v-bind:style="!close ? 'height: 0px' : 'height: 100px'" style="overflow: hidden; display: block; text-align: center; transition: 1s">
+								<div class="panel-body no-padding text-center" v-bind:style="!close ? 'height: 0px' : !closesec ? 'height: 250px' : 'height: 390px'" style="overflow: hidden; display: block; text-align: center; transition: 1s">
 									<div class="container-fluid">
 											<div class="row">
-												<div class="col-md-6">
+												<div class="col-md-4">
 													<div class="panel" style="border: 1px solid rgba(0,0,0,0.1)">
 														<div class="panel-body text-center">
-															<div class="col-md-3">
-																surname :
-															</div>
-															<div class="col-md-9">
-																{{ info.surname }}
-															</div>
+																<p onmouseover="this.style.cursor='pointer'" v-on:click="pointstat = !pointstat">surname :	{{ info.surname }}</p>
+																<div v-if="pointstat" class="input-group">
+																	<input class="form-control" type="text" v-model="surname">
+																	<span class="input-group-btn"><button class="btn" v-bind:class="surname != '' ? 'btn-primary' : 'btn-default'" v-on:click="rename()" type="button">Rename</button></span>
+																</div>
 														</div>
 													</div>
 												</div>
-												<div class="col-md-6">
+												<div class="col-md-4">
 													<div class="panel" style="border: 1px solid rgba(0,0,0,0.1)">
 														<div class="panel-body text-center">
 														name : {{ info.name }}
 														</div>
 													</div>
 											</div>
+											<div class="col-md-3">
+												<div class="panel" style="border: 1px solid rgba(0,0,0,0.1)">
+													<div class="panel-body text-center">
+													status : {{  info.status }}
+													</div>
+												</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="panel" style="border: 1px solid rgba(0,0,0,0.1)">
+												<div class="panel-heading" style="padding-bottom: 0px; padding-top: 0px">
+													<div class="right">
+														<button type="button" v-on:click="closesec = !closesec" class="btn-toggle-collapse"><i v-if="closesec" class="lnr lnr-chevron-up"></i><i v-if="!closesec" class="lnr lnr-chevron-down"></i></button>
+													</div>
+												</div>
+												<div class="panel-body" style="max-height: 260px;overflow-y: scroll; text-align: center">
+													<table class="table table-striped">
+														<thead>
+															<tr>
+																<th>date</th>
+												        <th>humidity</th>
+								                <th>turbidity</th>
+							                  <th>conductance</th>
+					  		                <th>ph</th>
+				  			                <th>pression</th>
+			  				                <th>temperature</th>
+						  	                <th>acceleration</th>
+															</tr>
+														</thead>
+														<tbody v-if="!closesec && info.datas.length > 0">
+																<td>{{new Date(parseInt(info.datas[info.datas.length - 1].date)).toLocaleDateString("fr-FR", {'hour': 'numeric', 'minute': 'numeric'})}}</td>
+																<td>{{info.datas[info.datas.length - 1].humidity}} %</td>
+																<td>{{info.datas[info.datas.length - 1].turbidity}} ppm</td>
+																<td>{{info.datas[info.datas.length - 1].conductance}} / 5v</td>
+																<td>{{info.datas[info.datas.length - 1].ph}} ph</td>
+																<td>{{info.datas[info.datas.length - 1].pression}} pascals</td>
+																<td>{{info.datas[info.datas.length - 1].temperature}} °C</td>
+																<td>{{info.datas[info.datas.length - 1].acceleration}} %</td>
+														</tbody>
+														<tbody v-if="!closesec && info.datas.length == 0">
+															<td>No Data</td>
+															<td>No Data</td>
+															<td>No Data</td>
+															<td>No Data</td>
+															<td>No Data</td>
+															<td>No Data</td>
+															<td>No Data</td>
+															<td>No Data</td>
+														</tbody>
+														<tbody v-if="closesec" v-for="data in info.datas">
+																<td>{{new Date(parseInt(data.date)).toLocaleDateString("fr-FR", {'hour': 'numeric', 'minute': 'numeric'})}}</td>
+																<td>{{data.humidity}}%</td>
+																<td>{{data.turbidity}} ppm</td>
+																<td>{{data.conductance}} / 5v</td>
+																<td>{{data.ph}} ph</td>
+																<td>{{data.pression}} pascals</td>
+																<td>{{data.temperature}} °C</td>
+																<td>{{data.acceleration}} %</td>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
 										</div>
 									</div>
 								</div>

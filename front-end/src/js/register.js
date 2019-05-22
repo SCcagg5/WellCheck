@@ -5,7 +5,8 @@ new Vue(
     password: "",
     password2: "",
     mail: "",
-    error: ""
+    error: "",
+    api: "https://eliotctl.fr/api/wellcheck/"
     },
   methods:{
     log: function() {
@@ -15,7 +16,7 @@ new Vue(
           "password": this.password,
           "password2": this.password2
         };
-       url = "http://51.75.30.103/register/"
+       url = this.api + "register/"
        axios.post(url, data)
             .then(response => {this.checklog(response.data)})
             .catch(error => console.log(error));
