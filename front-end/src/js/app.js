@@ -61,7 +61,7 @@ var my_app = new Vue({
 
         for (var i = 0; i < this.my_points.length; i++){
           var icon = {
-            url: "https://eliotctl.fr/WellCheck/assets/img/float.svg",
+            url: "https://eliotctl.fr/WellCheck/assets/img/float.png",
             scaledSize: new google.maps.Size(40, 40)
           }
           var myLatlng = new google.maps.LatLng(this.my_points[i].location.lat,this.my_points[i].location.lng);
