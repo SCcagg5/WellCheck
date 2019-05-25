@@ -221,7 +221,7 @@ th {
 														</tbody>
 														<tbody v-if="closesec" v-for="data in info.datas">
 																<td>{{new Date(parseInt(data.date)).toLocaleDateString("fr-FR", {'hour': 'numeric', 'minute': 'numeric'})}}</td>
-																<td>{{data.humidity}}%</td>
+																<td>{{data.humidity}} %</td>
 																<td>{{data.turbidity}} ppm</td>
 																<td>{{data.conductance}} / 5v</td>
 																<td>{{data.ph}} ph</td>
