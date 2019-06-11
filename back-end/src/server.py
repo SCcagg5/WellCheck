@@ -5,9 +5,9 @@ import json as JSON
 import os
 
 app = Bottle()
-host = os.getenv('API_HOST', '172.0.0.1')
-port = os.getenv('API_PORT', 8080)
-weba = os.getenv('API_WEBA', '*')
+host = str(os.getenv('API_HOST', '172.0.0.1'))
+port = int(os.getenv('API_PORT', 8080))
+weba = str(os.getenv('API_WEBA', '*'))
 
 call = lambda x : callnext(request).call(x)
 
