@@ -1,6 +1,7 @@
-from params import check
-from user import user
-from point import point, points
+from Model.basic import check
+from Object.params import check
+from Object.user import user
+from Object.point import point, points
 
 
 def connect(cn, nextc):
