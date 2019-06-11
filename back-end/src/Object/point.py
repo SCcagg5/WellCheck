@@ -56,13 +56,13 @@ def loaddata(trame, date):
         }
     return ret
 
-def addtodb(data, id):
+def addtodb(data, p_id):
     if data["type"] == "DATA":
         sql.input("INSERT INTO `data` (`point_id`, `date`, `humidity`, `turbidity`, `conductance`, `ph`, `pression`, `temperature`, `acceleration`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);" ,
-        (id, data["data"]["date"], data["data"]["humidity"], data["data"]["turbidity"], data["data"]["conductance"], data["data"]["ph"], data["data"]["pression"], data["data"]["temperature"], data["data"]["acceleration"]))
+        (p_id, data["data"]["date"], data["data"]["humidity"], data["data"]["turbidity"], data["data"]["conductance"], data["data"]["ph"], data["data"]["pression"], data["data"]["temperature"], data["data"]["acceleration"]))
     elif data["type"] == "GPS":
         sql.input("UPDATE `point` SET `lng` = %s, `lat` = %s WHERE `id` = %s;", \
-        (data["data"]["lng"], data["data"]["lat"], id))
+        (data["data"]["lng"], data["data"]["lat"], p_id))
     return
 
 
@@ -150,7 +150,7 @@ class point:
         if self.id is None:
             self.id = sql.get("SELECT `id` FROM `point` WHERE `id_key` = %s", (self.sig_id))[0][0]
         data = sql.get("SELECT * FROM `point` WHERE `id` = %s", (self.id))
-        if len(data) == 0:
+        if not data:
             self.err = [False, "Invalid point_id", 400]
             return
         data = data[0]
