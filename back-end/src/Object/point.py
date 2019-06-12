@@ -5,14 +5,14 @@ from requests.auth import HTTPBasicAuth
 from sql import sql
 import time
 
-
-login = os.getenv('SIGFOX_LOG', None)
-password = os.getenv('SIGFOX_PASS', None)
-
-base = 1558515793000
-last = -1
-
 class inputpoint:
+    def __init__(self, trame, id_key, date = None):
+        self.trame = trame
+        self.id_key = id_key
+        self.date = date if date not None else int(round(time.time()))
+        self.data = self.loaddata(self.trame, self.date)
+
+
     def loaddata(self, trame, date):
         ret = {"type": None, "data": None}
         if len(trame) == 12:
@@ -35,14 +35,16 @@ class inputpoint:
             }
         return ret
 
-    def addtodb(self, data, p_id):
+    def addtodb(self):
+        data = self.data
+        p_id = self.id_key
         if data["type"] == "DATA":
             sql.input("INSERT INTO `data` (`point_id`, `date`, `humidity`, `turbidity`, `conductance`, `ph`, `pression`, `temperature`, `acceleration`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);" ,
             (p_id, data["data"]["date"], data["data"]["humidity"], data["data"]["turbidity"], data["data"]["conductance"], data["data"]["ph"], data["data"]["pression"], data["data"]["temperature"], data["data"]["acceleration"]))
         elif data["type"] == "GPS":
             sql.input("UPDATE `point` SET `lng` = %s, `lat` = %s WHERE `id` = %s;", \
             (data["data"]["lng"], data["data"]["lat"], p_id))
-        return
+        return [True, {"inputed": data, "to": p_id}, None]
 
 
 class points:

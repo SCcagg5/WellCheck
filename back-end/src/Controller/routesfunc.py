@@ -1,12 +1,12 @@
 from Model.basic import check
 from Object.params import check
 from Object.user import user
-from Object.point import point, points
+from Object.point import point, points, inputpoints
 
 
 def connect(cn, nextc):
     err = check.contain(cn.pr, ["mail", ["password", "token"]])
-    if not err[0]:
+    if check.err(err):
         return cn.toret.add_error(err[1], err[2])
     cn.pr = err[1]
 
@@ -17,7 +17,7 @@ def connect(cn, nextc):
 
 def register(cn, nextc):
     err = check.contain(cn.pr, ["mail", "password", "password2"])
-    if not err[0]:
+    if check.err(err):
         return cn.toret.add_error(err[1], err[2])
     cn.pr = err[1]
     use = user(cn.pr["mail"], cn.pr["password"])
@@ -26,7 +26,7 @@ def register(cn, nextc):
 
 def addpoint(cn, nextc):
     err = check.contain(cn.pr, ["key", "sig_id"])
-    if not err[0]:
+    if check.err(err):
         return cn.toret.add_error(err[1], err[2])
     device = point(None, cn.private["user_id"], cn.pr["key"], cn.pr["sig_id"])
     err = device.infos()
@@ -34,7 +34,7 @@ def addpoint(cn, nextc):
 
 def infos(cn, nextc):
     err = check.contain(cn.pr, ["point_id"])
-    if not err[0]:
+    if check.err(err):
         return cn.toret.add_error(err[1], err[2])
     device = point(cn.pr["point_id"], cn.private["user_id"])
     err = device.infos()
@@ -42,15 +42,23 @@ def infos(cn, nextc):
 
 def share(cn, nextc):
     err = check.contain(cn.pr, ["point_id", "mail_to"])
-    if not err[0]:
+    if check.err(err):
         return cn.toret.add_error(err[1], err[2])
     device = point(cn.pr["point_id"], cn.private["user_id"])
     err = device.share(cn.pr["mail_to"])
     return cn.call_next(nextc, err)
 
+def inputpoint(cn, nextc):
+    err = check.contain(cn.pr, ["trame","id_key"])
+    if check.err(err):
+        return cn.toret.add_error(err[1], err[2])
+    device = inputpoint(cn.pr["trame"], cn.private["id_key"])
+    err = device.addtodb()
+    return cn.call_next(nextc, err)
+
 def surname(cn, nextc):
     err = check.contain(cn.pr, ["point_id", "surname"])
-    if not err[0]:
+    if check.err(err):
         return cn.toret.add_error(err[1], err[2])
     device = point(cn.pr["point_id"], cn.private["user_id"])
     err = device.rename(cn.pr["surname"])

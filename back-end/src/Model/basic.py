@@ -95,6 +95,9 @@ class check:
         except:
             return []
 
+    def err(ret):
+        return not ret[0]
+
 class callnext:
     def __init__(self, req, resp = None, err = None):
         self.pr = check.json(req)
