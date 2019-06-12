@@ -28,7 +28,6 @@ def addpoint(cn, nextc):
     err = check.contain(cn.pr, ["key", "sig_id"])
     if not err[0]:
         return cn.toret.add_error(err[1], err[2])
-    cn.pr = err[1]
     device = point(None, cn.private["user_id"], cn.pr["key"], cn.pr["sig_id"])
     err = device.infos()
     return cn.call_next(nextc, err)
