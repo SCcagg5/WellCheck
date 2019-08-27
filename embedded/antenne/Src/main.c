@@ -23,11 +23,12 @@
 #include "adc.h"
 #include "usart.h"
 #include "gpio.h"
-#include <stdlib.h>
-#include <string.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
+#include <stdlib.h>
+#include <string.h>
 
 /* USER CODE END Includes */
 
@@ -53,7 +54,7 @@
 // Turbidity PA6
 uint16_t adc1Value = 0;
 
-// Photo-transistor PA7
+// Ph PA7
 uint16_t adc2Value = 0;
 
 // Humidity PC10
@@ -89,13 +90,13 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   * @brief  The application entry point.
   * @retval int
   */
-
 int main(void)
 {
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
   
+
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
@@ -118,47 +119,49 @@ int main(void)
   MX_ADC1_Init();
   MX_ADC2_Init();
   MX_ADC3_Init();
-  
-	/* USER CODE BEGIN 2 */
+  /* USER CODE BEGIN 2 */
 	
 	unsigned char *frameData;
 	frameData = malloc(3 * sizeof(uint16_t));
 	memset(frameData, 0, 3 * sizeof(uint16_t));
+	
+	unsigned int test = 0;
 	
 	//HAL_Delay(3000);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
-	while (1)
-  {
+	while(1) 
+	{
 		/* USER CODE BEGIN WHILE */
-
 		if (blueButton == 1)
-		{
+		{			
+			test = 1;
+			
 			HAL_ADC_Start(&hadc1);
 			HAL_ADC_PollForConversion(&hadc1, 100);
 		
 			HAL_ADC_Start(&hadc2);
 			HAL_ADC_PollForConversion(&hadc2, 100);
-		
+			
 			HAL_ADC_Start(&hadc3);
 			HAL_ADC_PollForConversion(&hadc3, 100);
-		
+			
 			adc1Value = HAL_ADC_GetValue(&hadc1);
 			adc2Value = HAL_ADC_GetValue(&hadc2);
 			adc3Value = HAL_ADC_GetValue(&hadc3);
-			
+
 			*frameData = adc1Value;
 			*frameData = *frameData << sizeof(uint16_t);
 			
 			*frameData += adc2Value;
 			*frameData = *frameData << sizeof(uint16_t);
-			
+
 			*frameData += adc3Value;
 			*frameData = *frameData << sizeof(uint16_t);
-		
-			sendSigfoxFrame(frameData,sizeof( 3 * sizeof(uint16_t)),0,0);
+
+			sendSigfoxFrame(frameData,sizeof( 8 * sizeof(unsigned char)),0,0);
 
 			//AT command : send_frame [hexData] [nbRepetition] [flag dowlink --> 0 : pas de dl, 1 : dl]
 			/*
@@ -180,13 +183,13 @@ int main(void)
 
 			blueButton = 0;
 			memset(frameData, 0, 3 * sizeof(uint16_t));
+			HAL_Delay(3000);
 		}
-	/* USER CODE END WHILE */
-  }
-	
+		/* USER CODE END WHILE */
+	}
 	/* USER CODE BEGIN 3 */
   
-	/* USER CODE END 3 */
+  /* USER CODE END 3 */
 }
 
 /**

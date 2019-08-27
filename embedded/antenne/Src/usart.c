@@ -19,9 +19,10 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "usart.h"
-#include <stdio.h>
 
 /* USER CODE BEGIN 0 */
+
+#include <stdio.h>
 
 /* USER CODE END 0 */
 
@@ -39,7 +40,7 @@ void MX_UART4_Init(void)
   huart4.Init.Mode = UART_MODE_TX_RX;
   huart4.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart4.Init.OverSampling = UART_OVERSAMPLING_16;
-	if (HAL_UART_Init(&huart4) != HAL_OK)
+  if (HAL_UART_Init(&huart4) != HAL_OK)
   {
     Error_Handler();
   }
