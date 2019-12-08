@@ -99,14 +99,14 @@ th {
 															<input type="text" class="form-control" placeholder="Mail" v-model="mail_to_share">
 															<br>
 															<select class="form-control" v-model="point_id_share">
-																<option disabled value="0">Vos appareils</option>
-    														<option v-for="point in my_points" value="{{point['id']}}">{{point['surname']}}</option>
+																<option value="0">Vos appareils</option>
+    														<option v-for="point in my_points" v-bind:value="point['id']" >{{point['surname']}}</option>
 															</select>
 															<br>
 					 										<button type="button"  v-on:click="sharepoint()" class="btn btn-block" v-bind:class="point_id_share != 0 && mail_to_share != '' ? 'btn-primary' : 'btn-default'">Ajouter</button>
 														</div>
 														<br>
-													<div v-if="my_points[point_id_share].shareto.length > 0">
+													<div v-if="my_points[point_id_share] != void 0 && my_points[point_id_share].shareto != void 0 &&my_points[point_id_share].shareto.length > 0">
 														Partagé a :
 														<table class="table table-striped">
 															<thead>

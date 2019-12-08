@@ -1,7 +1,6 @@
 from Model.basic import check
-from Object.params import check
 from Object.user import user
-from Object.point import point, points
+from Object.point import point, points, sigfox
 
 
 def connect(cn, nextc):
@@ -65,4 +64,11 @@ def getall(cn, nextc):
 def getalldetails(cn, nextc):
     devices = points(cn.private["user_id"])
     err = devices.getalldetails()
+    return cn.call_next(nextc, err)
+
+def adddata(cn, nextc):
+    err = check.contain(cn.pr, ["data"])
+    if not err[0]:
+        return cn.toret.add_error(err[1], err[2])
+    err = sigfox.save(cn.pr["data"])
     return cn.call_next(nextc, err)

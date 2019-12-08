@@ -10,5 +10,6 @@ def setuproute(app, call):
     @app.route('/surname/',     ['OPTIONS', 'POST'],        lambda x = None: call([connect, surname])       )
     @app.route('/allid/',       ['OPTIONS', 'POST'],        lambda x = None: call([connect, getall])        )
     @app.route('/allinfos/',    ['OPTIONS', 'POST'],        lambda x = None: call([connect, getalldetails]) )
+    @app.route('/dataadd/',    ['OPTIONS', 'POST'],        lambda x = None: call([adddata]) )
     def base():
         return

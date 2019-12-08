@@ -1,4 +1,4 @@
-from sql import sql
+from .sql import sql
 import hashlib
 import time
 import os

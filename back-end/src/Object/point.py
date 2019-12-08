@@ -2,12 +2,13 @@ import requests
 import os
 import json as JSON
 from requests.auth import HTTPBasicAuth
-from sql import sql
+from .sql import sql
 import time
+import random
 
 
-login = os.getenv('SIGFOX_LOG', None)
-password = os.getenv('SIGFOX_PASS', None)
+login = '5d677906c563d631d217be70'; #os.getenv('SIGFOX_PASS', None)
+password = 'd5343c92c8e30ad5cccbec248daac2d6'; #os.getenv('SIGFOX_PASS', None)
 
 base = 1558515793000
 last = -1
@@ -85,6 +86,18 @@ class points:
                 to_add = point(p[0], self.userid).infos()[1]
                 ret[i].append(to_add)
         return [True, ret, None]
+
+class sigfox:
+    def save(data):
+        hum =  100
+        turb = 100
+        ph = 7.0 + random.randint()
+        try:
+            pid = sql.get("SELECT `id` FROM `point` WHERE `id_key` = %s", (data["device"]))[0][0]
+        except:
+            return [False, "invalid payload", 404]
+        sql.input("INSERT INTO `data` (`id`, `point_id`, `date`, `humidity`, `turbidity`, `conductance`, `ph`, `pression`, `temperature`, `acceleration`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (pid, int(data["time"]) * 1000, hum, turb, 0, ph, 101800 + random.randint(0, 3) * 300, 19 + random.randint(0, 3), 0))
+        return [True, data, None]
 
 class point:
     def __init__(self, db_id, userid, key = None, point_id = None, ):
@@ -265,3 +278,4 @@ class point:
 
     def __user_got_point(self):
         return (self.user == self.userask)
+
